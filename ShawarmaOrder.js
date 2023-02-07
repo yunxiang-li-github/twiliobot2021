@@ -99,7 +99,6 @@ module.exports = class ShwarmaOrder extends Order {
         this.stateCur = OrderState.SECOND_ITEM_SELECTION;
         this.sToppings = sInput;
         aReturn.push("Would you a second item?");
-
         break;
 
       case OrderState.SECOND_ITEM_SELECTION:
@@ -113,7 +112,7 @@ module.exports = class ShwarmaOrder extends Order {
           break;
         }
         // else go to upsell
-        this.stateCur = OrderState.DRINK;
+        this.stateCur = OrderState.DRINKS;
         aReturn.push("Would you like drinks with that? If yes, Enter drink name:");
         break;
       case OrderState.SECOND_ITEM:
@@ -171,7 +170,7 @@ module.exports = class ShwarmaOrder extends Order {
           break;
         }
         // else go to upsell
-        this.stateCur = OrderState.DRINK;
+        this.stateCur = OrderState.DRINKS;
         aReturn.push("Would you like drinks with that? If yes, Enter drink name:");
         break;
       case OrderState.THIRD_ITEM:
