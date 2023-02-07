@@ -2,7 +2,7 @@ const Order = require("./Order");
 
 const shwarma_cost = 10;
 const pizza_cost = 10;
-const wrap_cost = 10;
+const youtiao_cost = 10;
 const small_add = 5;
 const large_add = 10;
 const cheese_topping_cost = 2;
@@ -15,6 +15,14 @@ const OrderState = Object.freeze({
   FIRST_ITEM: Symbol("1st item"),
   SIZE: Symbol("size"),
   TOPPINGS: Symbol("toppings"),
+  SECOND_ITEM_SELECTION: Symbol("2nd_item_selection"),
+  SECOND_ITEM: Symbol("2nd_item"),
+  SIZE2: Symbol("size2"),
+  TOPPINGS2: Symbol("toppings2"),
+  THIRD_ITEM: Symbol("3rd_item"),
+  THIRD_ITEM_SELECTION: Symbol("3rd_item_selection"),
+  SIZE3: Symbol("size3"),
+  TOPPINGS3: Symbol("toppings3"),
   DRINKS: Symbol("drinks"),
   FRIES: Symbol("fries"),
   PAYMENT: Symbol("payment")
@@ -25,11 +33,17 @@ module.exports = class ShwarmaOrder extends Order {
     super(sNumber, sUrl);
     this.stateCur = OrderState.WELCOMING;
     this.sSize = "";
+    this.sSize2 = "";
+    this.sSize3 = "";
     this.sToppings = "";
+    this.sToppings2 = "";
+    this.sToppings3 = "";
+    this.sItem = "";
+    this.sItem2 = "";
+    this.sItem3 = "";
+    this.nOrder = 0;
     this.sDrinks = "";
     this.sFries = "";
-    this.sItem = "";
-    this.nOrder = 0;
   }
   handleInput(sInput) {
     let aReturn = [];
@@ -40,7 +54,7 @@ module.exports = class ShwarmaOrder extends Order {
         aReturn.push("Please enter:");
         aReturn.push("1 for shawarama");
         aReturn.push("2 for pizza");
-        aReturn.push("3 for wrap");
+        aReturn.push("3 for youtiao");
         break;
       case OrderState.FIRST_ITEM:
         if ((sInput != "1") && (sInput != "2") && (sInput != "3")) {
@@ -54,8 +68,8 @@ module.exports = class ShwarmaOrder extends Order {
             this.sItem = "pizza";
             this.nOrder = pizza_cost;
           } else if (sInput == "3") {
-            this.sItem = "wrap";
-            this.nOrder = wrap_cost;
+            this.sItem = "youtiao";
+            this.nOrder = youtiao_cost;
           }
           this.stateCur = OrderState.SIZE;
           aReturn.push("What size do you like?");
@@ -76,16 +90,135 @@ module.exports = class ShwarmaOrder extends Order {
         }
         break;
       case OrderState.TOPPINGS:
-        if (this.sToppings.toLowerCase() == "cheese") {
+        if (sInput.toLowerCase() == "cheese") {
+          this.nOrder += cheese_topping_cost;
+        }
+        else {
+          this.nOrder += other_topping_cost;
+        }
+        this.stateCur = OrderState.SECOND_ITEM_SELECTION;
+        this.sToppings = sInput;
+        aReturn.push("Would you a second item?");
+
+        break;
+
+      case OrderState.SECOND_ITEM_SELECTION:
+        // if customer go for the second item
+        if (sInput.toLowerCase() != "no") {
+          aReturn.push("Please enter:");
+          aReturn.push("1 for shawarama");
+          aReturn.push("2 for pizza");
+          aReturn.push("3 for youtiao");
+          this.stateCur = OrderState.SECOND_ITEM;
+          break;
+        }
+        // else go to upsell
+        this.stateCur = OrderState.DRINK;
+        aReturn.push("Would you like drinks with that? If yes, Enter drink name:");
+        break;
+      case OrderState.SECOND_ITEM:
+        if ((sInput != "1") && (sInput != "2") && (sInput != "3")) {
+          aReturn.push("Please enter 1,2 or 3");
+        }
+        else {
+          if (sInput == "1") {
+            this.sItem2 = "shawarama";
+            this.nOrder += shwarma_cost;
+          } else if (sInput == "2") {
+            this.sItem2 = "pizza";
+            this.nOrder += pizza_cost;
+          } else if (sInput == "3") {
+            this.sItem2 = "youtiao";
+            this.nOrder += youtiao_cost;
+          }
+          this.stateCur = OrderState.SIZE2;
+          aReturn.push("What size would you like?");
+        }
+        break;
+      case OrderState.SIZE2:
+        if ((sInput.toLowerCase() != "large") && (sInput.toLowerCase() != "small")) {
+          aReturn.push("invalid input, please select large or small");
+        } else {
+          if (sInput.toLowerCase() == "large") {
+            this.nOrder += large_add;
+          } else {
+            this.nOrder += small_add;
+          }
+          this.stateCur = OrderState.TOPPINGS2;
+          this.sSize2 = sInput;
+          aReturn.push("What toppings would you like?");
+        }
+        break;
+      case OrderState.TOPPINGS2:
+        if (sInput.toLowerCase() == "cheese") {
+          this.nOrder += cheese_topping_cost;
+        }
+        else {
+          this.nOrder += other_topping_cost;
+        }
+        this.stateCur = OrderState.THIRD_ITEM_SELECTION;
+        this.sToppings2 = sInput;
+        aReturn.push("Would you a third item?");
+        break;
+      case OrderState.THIRD_ITEM_SELECTION:
+        // if customer go for the second item
+        if (sInput.toLowerCase() != "no") {
+          aReturn.push("Please enter:");
+          aReturn.push("1 for shawarama");
+          aReturn.push("2 for pizza");
+          aReturn.push("3 for youtiao");
+          this.stateCur = OrderState.THIRD_ITEM;
+          break;
+        }
+        // else go to upsell
+        this.stateCur = OrderState.DRINK;
+        aReturn.push("Would you like drinks with that? If yes, Enter drink name:");
+        break;
+      case OrderState.THIRD_ITEM:
+        if ((sInput != "1") && (sInput != "2") && (sInput != "3")) {
+          aReturn.push("Please enter 1,2 or 3");
+        }
+        else {
+          if (sInput == "1") {
+            this.sItem3 = "shawarama";
+            this.nOrder += shwarma_cost;
+          } else if (sInput == "2") {
+            this.sItem3 = "pizza";
+            this.nOrder += pizza_cost;
+          } else if (sInput == "3") {
+            this.sItem3 = "youtiao";
+            this.nOrder += youtiao_cost;
+          }
+          this.stateCur = OrderState.SIZE3;
+          aReturn.push("What size would you like?");
+        }
+        break;
+      case OrderState.SIZE3:
+        if ((sInput.toLowerCase() != "large") && (sInput.toLowerCase() != "small")) {
+          aReturn.push("invalid input, please select large or small");
+        } else {
+          if (sInput.toLowerCase() == "large") {
+            this.nOrder += large_add;
+          } else {
+            this.nOrder += small_add;
+          }
+          this.stateCur = OrderState.TOPPINGS3;
+          this.sSize3 = sInput;
+          aReturn.push("What toppings would you like?");
+        }
+        break;
+      case OrderState.TOPPINGS3:
+        if (sInput.toLowerCase() == "cheese") {
           this.nOrder += cheese_topping_cost;
         }
         else {
           this.nOrder += other_topping_cost;
         }
         this.stateCur = OrderState.DRINKS;
-        this.sToppings = sInput;
+        this.sToppings3 = sInput;
         aReturn.push("Would you like drinks with that? If yes, Enter drink name:");
         break;
+
       case OrderState.DRINKS:
         if (sInput.toLowerCase() != "no") {
           this.sDrinks = sInput;
@@ -94,6 +227,7 @@ module.exports = class ShwarmaOrder extends Order {
         this.stateCur = OrderState.FRIES;
         aReturn.push("Would you like fries with that?");
         break;
+
       case OrderState.FRIES:
         if (sInput.toLowerCase() != "no") {
           this.sFries = sInput;
@@ -103,6 +237,12 @@ module.exports = class ShwarmaOrder extends Order {
         this.nOrder = (this.nOrder * 1.13).toFixed(2);
         aReturn.push("Thank-you for your order of");
         aReturn.push(`${this.sSize} ${this.sItem} with ${this.sToppings}`);
+        if (this.sItem2) {
+          aReturn.push(`${this.sSize2} ${this.sItem2} with ${this.sToppings2}`);
+        }
+        if (this.sItem3) {
+          aReturn.push(`${this.sSize3} ${this.sItem3} with ${this.sToppings3}`);
+        }
         if (this.sDrinks) {
           aReturn.push(`drink: ${this.sDrinks}`);
         }
@@ -112,6 +252,7 @@ module.exports = class ShwarmaOrder extends Order {
         aReturn.push(`Please pay for your order here`);
         aReturn.push(`${this.sUrl}/payment/${this.sNumber}/`);
         break;
+
       case OrderState.PAYMENT:
         this.isDone(true);
         let d = new Date();
@@ -121,9 +262,9 @@ module.exports = class ShwarmaOrder extends Order {
         // console.log(sInput.purchase_units[0]);
         let addObj = sInput.purchase_units[0].shipping.address;
         let address = addObj.address_line_1 + ', '
-                      + addObj.admin_area_2 + ', '
-                      + addObj.admin_area_1 + ', '
-                      + addObj.postal_code
+          + addObj.admin_area_2 + ', '
+          + addObj.admin_area_1 + ', '
+          + addObj.postal_code
         aReturn.push(`Your order will be delivered to ${address}`);
         break;
     }
