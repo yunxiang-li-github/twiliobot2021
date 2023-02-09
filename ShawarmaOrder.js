@@ -95,18 +95,22 @@ module.exports = class ShwarmaOrder extends Order {
         }
         break;
       case OrderState.TOPPINGS_SELECTION:
-        // if customer select toppings
-        if (sInput.toLowerCase() != "no") {
-          aReturn.push("Please enter toppings:");
-          aReturn.push("1 for cheese");
-          aReturn.push("2 for garlic");
-          aReturn.push("3 for basil");
-          this.stateCur = OrderState.TOPPINGS;
-          break;
+        if ((sInput.toLowerCase() != "yes") && (sInput.toLowerCase() != "no")) {
+          aReturn.push("invalid input, please enter yes or no");
+        } else {
+          // if customer select toppings, ask which toppings they want
+          if (sInput.toLowerCase() != "no") {
+            aReturn.push("Please enter toppings:");
+            aReturn.push("1 for cheese");
+            aReturn.push("2 for garlic");
+            aReturn.push("3 for basil");
+            this.stateCur = OrderState.TOPPINGS;
+            break;
+          }
+          // else go to second item question
+          this.stateCur = OrderState.SECOND_ITEM_SELECTION;
+          aReturn.push("Would you a second item?");
         }
-        // else go to second item question
-        this.stateCur = OrderState.SECOND_ITEM_SELECTION;
-        aReturn.push("Would you a second item?");
         break;
       case OrderState.TOPPINGS:
         if ((sInput != "1") && (sInput != "2") && (sInput != "3")) {
@@ -131,18 +135,22 @@ module.exports = class ShwarmaOrder extends Order {
         break;
 
       case OrderState.SECOND_ITEM_SELECTION:
-        // if customer go for the second item
-        if (sInput.toLowerCase() != "no") {
-          aReturn.push("Please enter:");
-          aReturn.push("1 for shawarama");
-          aReturn.push("2 for pizza");
-          aReturn.push("3 for youtiao");
-          this.stateCur = OrderState.SECOND_ITEM;
-          break;
+        if ((sInput.toLowerCase() != "yes") && (sInput.toLowerCase() != "no")) {
+          aReturn.push("invalid input, please enter yes or no");
+        } else {
+          // if customer go for the second item
+          if (sInput.toLowerCase() != "no") {
+            aReturn.push("Please enter:");
+            aReturn.push("1 for shawarama");
+            aReturn.push("2 for pizza");
+            aReturn.push("3 for youtiao");
+            this.stateCur = OrderState.SECOND_ITEM;
+            break;
+          }
+          // else go to upsell
+          this.stateCur = OrderState.DRINKS;
+          aReturn.push("Would you like drinks with that? If yes, Enter drink name:");
         }
-        // else go to upsell
-        this.stateCur = OrderState.DRINKS;
-        aReturn.push("Would you like drinks with that? If yes, Enter drink name:");
         break;
       case OrderState.SECOND_ITEM:
         if ((sInput != "1") && (sInput != "2") && (sInput != "3")) {
@@ -178,18 +186,22 @@ module.exports = class ShwarmaOrder extends Order {
         }
         break;
       case OrderState.TOPPINGS2_SELECTION:
-        // if customer select toppings
-        if (sInput.toLowerCase() != "no") {
-          aReturn.push("Please enter toppings:");
-          aReturn.push("1 for cheese");
-          aReturn.push("2 for garlic");
-          aReturn.push("3 for basil");
-          this.stateCur = OrderState.TOPPINGS2;
-          break;
+        if ((sInput.toLowerCase() != "yes") && (sInput.toLowerCase() != "no")) {
+          aReturn.push("invalid input, please enter yes or no");
+        } else {
+          // if customer select toppings
+          if (sInput.toLowerCase() != "no") {
+            aReturn.push("Please enter toppings:");
+            aReturn.push("1 for cheese");
+            aReturn.push("2 for garlic");
+            aReturn.push("3 for basil");
+            this.stateCur = OrderState.TOPPINGS2;
+            break;
+          }
+          // else go to third item question
+          this.stateCur = OrderState.THIRD_ITEM_SELECTION;
+          aReturn.push("Would you a third item?");
         }
-        // else go to third item question
-        this.stateCur = OrderState.THIRD_ITEM_SELECTION;
-        aReturn.push("Would you a third item?");
         break;
       case OrderState.TOPPINGS2:
         if ((sInput != "1") && (sInput != "2") && (sInput != "3")) {
@@ -214,18 +226,22 @@ module.exports = class ShwarmaOrder extends Order {
         break;
 
       case OrderState.THIRD_ITEM_SELECTION:
-        // if customer go for the second item
-        if (sInput.toLowerCase() != "no") {
-          aReturn.push("Please enter:");
-          aReturn.push("1 for shawarama");
-          aReturn.push("2 for pizza");
-          aReturn.push("3 for youtiao");
-          this.stateCur = OrderState.THIRD_ITEM;
-          break;
+        if ((sInput.toLowerCase() != "yes") && (sInput.toLowerCase() != "no")) {
+          aReturn.push("invalid input, please enter yes or no");
+        } else {
+          // if customer go for the second item
+          if (sInput.toLowerCase() != "no") {
+            aReturn.push("Please enter:");
+            aReturn.push("1 for shawarama");
+            aReturn.push("2 for pizza");
+            aReturn.push("3 for youtiao");
+            this.stateCur = OrderState.THIRD_ITEM;
+            break;
+          }
+          // else go to upsell
+          this.stateCur = OrderState.DRINKS;
+          aReturn.push("Would you like drinks with that? If yes, Enter drink name:");
         }
-        // else go to upsell
-        this.stateCur = OrderState.DRINKS;
-        aReturn.push("Would you like drinks with that? If yes, Enter drink name:");
         break;
       case OrderState.THIRD_ITEM:
         if ((sInput != "1") && (sInput != "2") && (sInput != "3")) {
@@ -262,18 +278,22 @@ module.exports = class ShwarmaOrder extends Order {
         break;
 
       case OrderState.TOPPINGS3_SELECTION:
-        // if customer select toppings
-        if (sInput.toLowerCase() != "no") {
-          aReturn.push("Please enter toppings:");
-          aReturn.push("1 for cheese");
-          aReturn.push("2 for garlic");
-          aReturn.push("3 for basil");
-          this.stateCur = OrderState.TOPPINGS3;
-          break;
+        if ((sInput.toLowerCase() != "yes") && (sInput.toLowerCase() != "no")) {
+          aReturn.push("invalid input, please enter yes or no");
+        } else {
+          // if customer select toppings
+          if (sInput.toLowerCase() != "no") {
+            aReturn.push("Please enter toppings:");
+            aReturn.push("1 for cheese");
+            aReturn.push("2 for garlic");
+            aReturn.push("3 for basil");
+            this.stateCur = OrderState.TOPPINGS3;
+            break;
+          }
+          // else go to drink question
+          this.stateCur = OrderState.DRINKS;
+          aReturn.push("Would you like drinks with that? If yes, Enter drink name:");
         }
-        // else go to drink question
-        this.stateCur = OrderState.DRINKS;
-        aReturn.push("Would you like drinks with that? If yes, Enter drink name:");
         break;
       case OrderState.TOPPINGS3:
         if ((sInput != "1") && (sInput != "2") && (sInput != "3")) {
@@ -316,20 +336,20 @@ module.exports = class ShwarmaOrder extends Order {
         this.nTax = (this.nOrder * 0.13).toFixed(2);
         this.nOrder = (this.nOrder * 1.13).toFixed(2);
         aReturn.push("Thank-you for your order of");
-        if(this.sToppings){
+        if (this.sToppings) {
           aReturn.push(`${this.sSize} ${this.sItem} with ${this.sToppings}`);
-        }else{
+        } else {
           aReturn.push(`${this.sSize} ${this.sItem} with no toppings`);
         }
         if (this.sItem2) {
-          if (this.sToppings2){
+          if (this.sToppings2) {
             aReturn.push(`${this.sSize2} ${this.sItem2} with ${this.sToppings2}`);
-          }else{
+          } else {
             aReturn.push(`${this.sSize2} ${this.sItem2} with no toppings`);
           }
         }
         if (this.sItem3) {
-          if (this.sToppings3){
+          if (this.sToppings3) {
             aReturn.push(`${this.sSize3} ${this.sItem3} with ${this.sToppings3}`);
           } else {
             aReturn.push(`${this.sSize3} ${this.sItem3} with no toppings`);
